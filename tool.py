@@ -4,7 +4,7 @@ import string
 from flask import make_response
 
 
-def build_success_response(db,cursor,data):
+def build_success_response(db, cursor, data):
     try:
         db.close()
         cursor.close()
@@ -17,7 +17,7 @@ def build_success_response(db,cursor,data):
     return make_response(res)
 
 
-def build_fail_response(db,cursor,msg):
+def build_fail_response(db, cursor, msg):
     try:
         db.close()
         cursor.close()
@@ -35,9 +35,9 @@ def build_session_id():
     return ''.join(secrets.choice(alphabet) for i in range(14))
 
 
-def check_session_id(db,cursor,session_id):
+def check_session_id(db, cursor, session_id):
     if session_id is None:
-        return False, build_fail_response(db,cursor,"session id不存在")
+        return False, build_fail_response(db, cursor, "session id不存在")
     sql = """
         SELECT b.id,b.name,b.studentId 
         FROM basic_info b INNER JOIN session_info s 
@@ -47,7 +47,7 @@ def check_session_id(db,cursor,session_id):
     cursor.execute(sql, session_id)
     result = cursor.fetchone()
     if result is None:
-        return False, build_fail_response(db,cursor,"session id不合法")
+        return False, build_fail_response(db, cursor, "session id不合法")
     return True, result
 
 
@@ -56,7 +56,7 @@ def build_data_dict(result, keys):
     return data
 
 
-def select_one_info(db,cursor,student_id):
+def select_one_info(db, cursor, student_id):
     sql = """
         SELECT b.id,b.name,b.studentId,
         a.className,a.city,a.coord,a.contact,a.mainwork,a.sentence 
@@ -72,7 +72,7 @@ def select_one_info(db,cursor,student_id):
     return result
 
 
-def select_all_info(db,cursor):
+def select_all_info(db, cursor):
     sql = """
         SELECT b.id,b.name,b.studentId,
         a.className,a.city,a.coord,a.contact,a.mainwork,a.sentence 
